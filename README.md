@@ -1,2 +1,2 @@
-# small_app_back_end
-using python ,fast api ,mysql
+# Deegle_backend
+Builing the seamless end to end chat app
