@@ -72,3 +72,11 @@ class PurchaseCreate(BaseModel):
     customer: CustomerCreate
     items: List[PurchaseItemCreate]
     total: Optional[float] = None
+
+
+class PurchaseResponse(BaseModel):
+    success: bool
+    message: str
+    customer: CustomerCreate
+    items: List[PurchaseItemCreate]
+    total: Optional[float] = None

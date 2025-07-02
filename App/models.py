@@ -49,9 +49,12 @@ class CustomerAdded(Base):
     quantity = Column(Integer)
     total_price = Column(Numeric(10, 2))
     ordered_at = Column(Date, server_default=func.now())
+    item_name = Column(String(100))  # ✅ Add this
+    item_description = Column(Text)  # ✅ Add this
 
     customer = relationship("Customer", back_populates="orders")
     item = relationship("Item", back_populates="orders")
+
 
 
 

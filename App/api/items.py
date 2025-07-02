@@ -110,8 +110,6 @@ async def delete_item(item_id: int, db: AsyncSession = Depends(get_async_db)):
     await db.delete(db_item)
     await db.commit()
     return {
-         {
         "success":"true",
         "data":"data deleted success"
         }
-    }
