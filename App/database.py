@@ -1,16 +1,31 @@
+import os
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from urllib.parse import quote_plus
+from dotenv import load_dotenv
 
-# URL encode the password to handle special characters
-password = "Deek@2002"
-encoded_password = quote_plus(password)
+# Load environment variables from a .env file (optional but useful for local development)
+load_dotenv()
 
-# Database configurations
-SYNC_DB_URL = f"mysql+pymysql://root:{encoded_password}@localhost:3306/deegle"
-ASYNC_DB_URL = f"mysql+aiomysql://root:{encoded_password}@localhost:3306/deegle"
+# Read environment variables with defaults
+MYSQL_DATABASE = os.getenv("MYSQL_DATABASE")
+MYSQL_ROOT_PASSWORD = os.getenv("MYSQL_ROOT_PASSWORD")
+MYSQL_USER = os.getenv("MYSQL_USER")
+MYSQL_HOST = os.getenv("MYSQL_HOST")
+MYSQL_PORT = os.getenv("MYSQL_PORT")
+
+# Encode the password to safely use special characters
+encoded_password = quote_plus(MYSQL_ROOT_PASSWORD)
+
+# Database URLs
+SYNC_DB_URL = (
+    f"mysql+pymysql://{MYSQL_USER}:{encoded_password}@{MYSQL_HOST}:{MYSQL_PORT}/{MYSQL_DATABASE}"
+)
+ASYNC_DB_URL = (
+    f"mysql+aiomysql://{MYSQL_USER}:{encoded_password}@{MYSQL_HOST}:{MYSQL_PORT}/{MYSQL_DATABASE}"
+)
 
 # Sync engine and session
 sync_engine = create_engine(
@@ -31,8 +46,8 @@ async_engine = create_async_engine(
     pool_pre_ping=True
 )
 AsyncSessionLocal = sessionmaker(
-    async_engine, 
-    class_=AsyncSession, 
+    async_engine,
+    class_=AsyncSession,
     expire_on_commit=False
 )
 
