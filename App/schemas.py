@@ -9,12 +9,14 @@ class ItemCreate(BaseModel):
     price: float = Field(..., gt=0)
     category: Optional[str] = Field(None, max_length=50)
     quantity: int = Field(0, ge=0)
+    image: Optional[str] = None
 
 class ItemUpdate(BaseModel):
     name: str= Field(None, max_length=100)
     description: str = None
     price: float = Field(None, gt=0)
     category: str = Field(None, max_length=50)
+    image: Optional[str] = None
 
     
     class Config:

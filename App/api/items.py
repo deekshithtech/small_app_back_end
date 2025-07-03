@@ -17,7 +17,8 @@ async def create_item(item: schemas.ItemCreate, db: AsyncSession = Depends(get_a
             name=item.name,
             description=item.description,
             price=item.price,
-            category=item.category
+            category=item.category,
+            image=item.image  
         )
         db.add(db_item)
         await db.flush()
@@ -41,30 +42,25 @@ async def create_item(item: schemas.ItemCreate, db: AsyncSession = Depends(get_a
         raise HTTPException(status_code=500, detail=f"Item creation failed: {str(e)}")
 
 @router.patch("/{item_id}")
-async def update_item(
-    item_id: int, 
-    item: schemas.ItemUpdate, 
-    db: AsyncSession = Depends(get_async_db)
-):
-    result = await db.execute(
-        select(models.Item)
-        .where(models.Item.item_id == item_id)
-    )
+async def update_item(item_id: int, item: schemas.ItemUpdate, db: AsyncSession = Depends(get_async_db)):
+    result = await db.execute(select(models.Item).where(models.Item.item_id == item_id))
     db_item = result.scalars().first()
+
     if not db_item:
         raise HTTPException(status_code=404, detail="Item not found")
-    
+
     update_data = item.dict(exclude_unset=True)
     for key, value in update_data.items():
         setattr(db_item, key, value)
-    
+
     await db.commit()
     await db.refresh(db_item)
-    return  {
-            "success":"true",
-            "msg":"item updated success from merchant",
-            "data":db_item
-        } 
+    return {
+        "success": "true",
+        "msg": "item updated success from merchant",
+        "data": db_item
+    }
+
 
 
 

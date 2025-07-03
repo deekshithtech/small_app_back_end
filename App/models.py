@@ -11,6 +11,7 @@ class Item(Base):
     description = Column(Text)
     price = Column(DECIMAL(10, 2), nullable=False)
     category = Column(String(50))
+    image = Column(Text, nullable=True) 
     created_at = Column(TIMESTAMP, server_default=func.now())
     updated_at = Column(TIMESTAMP, server_default=func.now(), onupdate=func.now())
 
